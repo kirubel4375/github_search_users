@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:github_search_users/Constants/const_keys.dart';
 import 'package:github_search_users/Models/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -16,11 +16,15 @@ class ServicesApi extends ChangeNotifier {
     try {
       final getResponse = await http
           .get(httpsUri, headers: {'Authentication': 'token $tokenApi'});
+          if(getResponse.statusCode == 200){
           _auser = Auser.fromJson(jsonDecode(getResponse.body));
-          print("here is the result");
+          }else{
+            _auser = null;
+          }
+          notifyListeners();
     } catch (e) {
       _auser = null;
-      print("here in the catch");
+      notifyListeners();
     }
   }
 }
